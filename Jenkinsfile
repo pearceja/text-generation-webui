@@ -64,15 +64,16 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                // Helm chart update steps go here
-                // This is an optional stage, conditional on the USE_HELM parameter and 'staging' branch
+                echo "Helm chart update steps would go here."
+                // Implement your Helm chart update logic here
             }
         }
     }
 
     post {
         always {
-            // Steps to clean up, send notifications, etc.
+            echo 'Cleaning up and finishing the pipeline.'
+            // Implement any necessary post-build actions here
         }
     }
 }
