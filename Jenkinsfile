@@ -11,6 +11,7 @@ pipeline {
         string(name: 'CREDENTIALS_ID', defaultValue: 'gcp-service-account-key', description: 'Credentials ID for Google Cloud')
         string(name: 'SSH_CREDENTIALS_ID', defaultValue: 'tickle', description: 'SSH Credentials ID for Git operations')
         booleanParam(name: 'USE_HELM', defaultValue: false, description: 'Use Helm Chart management')
+        string(name: 'CUDA_ARCH_LIST', defaultValue: '3.5;5.0;6.0;6.1;7.0;7.5;8.0;8.6+PTX', description: 'List of CUDA architectures to target')
     }
 
     environment {
@@ -30,9 +31,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building Docker image...'
-                // Update the path to the Dockerfile
-                sh "docker build -t ${params.DOCKER_REGISTRY}/${params.PROJECT_ID}/${IMAGE_NAME}:${TAG} -f docker/Dockerfile ."
+                echo 'Building Docker image with specified CUDA architectures...'
+                sh "docker build --build-arg TORCH_CUDA_ARCH_LIST=\"${params.CUDA_ARCH_LIST}\" -t ${params.DOCKER_REGISTRY}/${params.PROJECT_ID}/${IMAGE_NAME}:${TAG} -f docker/Dockerfile ."
             }
         }
 
