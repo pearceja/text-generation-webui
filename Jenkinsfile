@@ -30,9 +30,12 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "docker build -t ${params.DOCKER_REGISTRY}/${params.PROJECT_ID}/${IMAGE_NAME}:${TAG} ."
+                echo 'Building Docker image...'
+                // Update the path to the Dockerfile
+                sh "docker build -t ${params.DOCKER_REGISTRY}/${params.PROJECT_ID}/${IMAGE_NAME}:${TAG} -f docker/Dockerfile ."
             }
         }
+
 
         stage('Authenticate and configure Docker') {
             steps {
